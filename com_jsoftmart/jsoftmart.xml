@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.9" type="component" method="upgrade">
+	<name>COM_JSOFTMART</name>
+	<author>Septdir Workshop</author>
+	<creationDate>January 2020</creationDate>
+	<copyright>Copyright (c) 2018 - 2020 Septdir Workshop. All rights reserved.</copyright>
+	<license>https://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>development@septdir.com</authorEmail>
+	<authorUrl>https://www.septdir.com/</authorUrl>
+	<version>0.0.1-dev</version>
+	<description>COM_JSOFTMART_DESCRIPTION</description>
+	<namespace>Joomla\Component\JSoftMart</namespace>
+	<scriptfile>script.php</scriptfile>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<files folder="site">
+		<folder>Controller</folder>
+		<folder>Helper</folder>
+		<folder>Model</folder>
+		<folder>Service</folder>
+		<folder>tmpl</folder>
+		<folder>View</folder>
+	</files>
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB/en-GB.com_jsoftmart.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.com_jsoftmart.sys.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.com_jsoftmart.ini</language>
+		<language tag="ru-RU">language/ru-RU/ru-RU.com_jsoftmart.sys.ini</language>
+	</languages>
+	<administration>
+		<menu>COM_JSOFTMART</menu>
+		<submenu>
+			<menu option="com_jsoftmart" view="dashboard">COM_JSOFTMART_DASHBOARD</menu>
+		</submenu>
+		<files folder="admin">
+			<folder>Controller</folder>
+			<folder>Extension</folder>
+			<folder>Field</folder>
+			<folder>forms</folder>
+			<folder>Helper</folder>
+			<folder>Model</folder>
+			<folder>services</folder>
+			<folder>sql</folder>
+			<folder>Table</folder>
+			<folder>tmpl</folder>
+			<folder>View</folder>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB/en-GB.com_jsoftmart.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_jsoftmart.sys.ini</language>
+			<language tag="ru-RU">language/ru-RU/ru-RU.com_jsoftmart.ini</language>
+			<language tag="ru-RU">language/ru-RU/ru-RU.com_jsoftmart.sys.ini</language>
+		</languages>
+	</administration>
+	<media destination="com_jsoftmart" folder="media">
+		<folder>css</folder>
+		<folder>js</folder>
+		<folder>images</folder>
+	</media>
+	<layouts destination="components/jsoftmart" folder="layouts">
+		<filename>index.html</filename>
+	</layouts>
+</extension>
