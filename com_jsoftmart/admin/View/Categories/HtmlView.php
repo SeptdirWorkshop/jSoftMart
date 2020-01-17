@@ -13,10 +13,12 @@ namespace Joomla\Component\JSoftMart\Administrator\View\Categories;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Pagination\Pagination;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
@@ -44,7 +46,7 @@ class HtmlView extends BaseHtmlView
 	/**
 	 * The model state.
 	 *
-	 * @var  Joomla\CMS\Object\CMSObject
+	 * @var  CMSObject
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
@@ -112,21 +114,35 @@ class HtmlView extends BaseHtmlView
 			$toolbar->addNew('category.add');
 		}
 
-		// Add publish & unpublish buttons
-		if ($canDo->get('core.edit.state'))
+		// Add actions toolbar
+		if ($canDo->get('core.edit.state') || Factory::getUser()->authorise('core.admin'))
 		{
-			$toolbar->publish('categories.publish');
-			$toolbar->unpublish('categories.unpublish');
+			$dropdown = $toolbar->dropdownButton('status-group')
+				->text('JTOOLBAR_CHANGE_STATUS')
+				->toggleSplit(false)
+				->icon('fa fa-ellipsis-h')
+				->buttonClass('btn btn-action')
+				->listCheck(true);
+			$childBar = $dropdown->getChildToolbar();
+
+			// Add publish & unpublish
+			if ($canDo->get('core.edit.state'))
+			{
+				$childBar->publish('categories.publish')->listCheck(true);
+				$childBar->unpublish('categories.unpublish')->listCheck(true);
+			}
+
+			// Add trash
+			if ($canDo->get('core.edit.state') && (int) $this->state->get('filter.published') !== -2)
+			{
+				$childBar->trash('categories.trash')->listCheck(true);
+			}
 		}
 
-		// Add delete/trash buttons
-		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete'))
+		// Add delete button
+		if ((int) $this->state->get('filter.published') === -2 && $canDo->get('core.delete'))
 		{
 			$toolbar->delete('categories.delete');
-		}
-		elseif ($canDo->get('core.edit.state'))
-		{
-			$toolbar->trash('categories.trash');
 		}
 
 		// Add rebuild button
