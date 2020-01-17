@@ -28,14 +28,14 @@ Text::script('COM_CPANEL_UNPUBLISH_MODULE_SUCCESS');
 Text::script('COM_CPANEL_UNPUBLISH_MODULE_ERROR');
 
 // Load scripts
-HTMLHelper::script('com_cpanel/admin-cpanel-default.min.js', array('version' => 'auto', 'relative' => true));
+HTMLHelper::script('com_cpanel/admin-cpanel-default.min.js', ['version' => 'auto', 'relative' => true]);
 HTMLHelper::script('com_cpanel/admin-add_module.js', ['version' => 'auto', 'relative' => true]);
 
 // Set up the bootstrap modal that will be used for all module editors
 echo HTMLHelper::_(
 	'bootstrap.renderModal',
 	'moduleDashboardAddModal',
-	array(
+	[
 		'title'      => Text::_('COM_CPANEL_ADD_MODULE_MODAL_TITLE'),
 		'backdrop'   => 'static',
 		'url'        => Route::_('index.php?option=com_cpanel&task=addModule&function=jSelectModuleType&position=' . $this->escape($this->position)),
@@ -45,7 +45,7 @@ echo HTMLHelper::_(
 			. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>'
 			. '<button type="button" class="button-save btn btn-sm btn-success hidden" data-target="#saveBtn"><span class="icon-save" aria-hidden="true"></span>'
 			. Text::_('JSAVE') . '</button>',
-	)
+	]
 );
 
 // Hide subhead
@@ -62,7 +62,7 @@ $this->document->addStyleDeclaration('#subhead{display:none;}');
 				<div class="card-columns">
 					<?php foreach ($this->quickicons as $iconmodule)
 					{
-						echo ModuleHelper::renderModule($iconmodule, array('style' => 'well'));
+						echo ModuleHelper::renderModule($iconmodule, ['style' => 'well']);
 					} ?>
 				</div>
 			</div>
@@ -71,7 +71,7 @@ $this->document->addStyleDeclaration('#subhead{display:none;}');
 			<div class="card-columns">
 				<?php foreach ($this->modules as $module)
 				{
-					echo ModuleHelper::renderModule($module, array('style' => 'well'));
+					echo ModuleHelper::renderModule($module, ['style' => 'well']);
 				} ?>
 			</div>
 		</div>

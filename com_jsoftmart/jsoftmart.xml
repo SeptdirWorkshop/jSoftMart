@@ -39,6 +39,7 @@
 		<menu>COM_JSOFTMART</menu>
 		<submenu>
 			<menu option="com_jsoftmart" view="dashboard">COM_JSOFTMART_DASHBOARD</menu>
+			<menu option="com_jsoftmart" view="categories">COM_JSOFTMART_CATEGORIES</menu>
 		</submenu>
 		<files folder="admin">
 			<folder>Controller</folder>

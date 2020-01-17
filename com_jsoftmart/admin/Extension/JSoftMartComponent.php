@@ -60,6 +60,6 @@ class JSoftMartComponent extends MVCComponent implements BootableExtensionInterf
 	 */
 	public function getContexts(): array
 	{
-		return array();
+		return [];
 	}
 }

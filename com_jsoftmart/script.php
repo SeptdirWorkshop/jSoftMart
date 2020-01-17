@@ -11,6 +11,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Filesystem\Path;
@@ -35,6 +36,12 @@ class com_jsoftmartInstallerScript
 	{
 		// Parse layouts
 		$this->parseLayouts($parent->getParent()->getManifest()->layouts, $parent->getParent());
+
+		// Check databases
+		$this->checkTables($parent);
+
+		// Check root category
+		$this->checkRootCategory('#__jsoftmart_categories');
 
 	}
 
@@ -65,7 +72,7 @@ class com_jsoftmartInstallerScript
 			$installer->getPath('source') . '/' . $folder : $installer->getPath('source');
 
 		// Prepare files
-		$copyFiles = array();
+		$copyFiles = [];
 		foreach ($element->children() as $file)
 		{
 			$path['src']  = Path::clean($source . '/' . $file);
@@ -88,6 +95,71 @@ class com_jsoftmartInstallerScript
 		}
 
 		return $installer->copyFiles($copyFiles);
+	}
+
+	/**
+	 * Method to create database tables in not exist.
+	 *
+	 * @param   InstallerAdapter  $parent  Parent object calling object.
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected function checkTables($parent)
+	{
+		if ($sql = file_get_contents($parent->getParent()->getPath('extension_administrator')
+			. '/sql/install.mysql.utf8.sql'))
+		{
+			$db = Factory::getDbo();
+
+			foreach ($db->splitSql($sql) as $query)
+			{
+				$db->setQuery($db->convertUtf8mb4QueryToUtf8($query));
+				try
+				{
+					$db->execute();
+				}
+				catch (JDataBaseExceptionExecuting $e)
+				{
+					Log::add(Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()), Log::WARNING, 'jerror');
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method to create root category if don't exist.
+	 *
+	 * @param   string  $table  Table name.
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected function checkRootCategory($table = null)
+	{
+		$db = Factory::getDbo();
+
+		// Get base categories
+		$query = $db->getQuery(true)
+			->select('id')
+			->from($table)
+			->where('id = 1');
+		$db->setQuery($query);
+
+		// Add root in not found
+		if (empty($db->loadResult()))
+		{
+			$root            = new stdClass();
+			$root->id        = 1;
+			$root->parent_id = 0;
+			$root->lft       = 0;
+			$root->rgt       = 1;
+			$root->level     = 0;
+			$root->path      = '';
+			$root->alias     = 'root';
+			$root->state     = 1;
+			$root->params    = '';
+
+			$db->insertObject($table, $root);
+		}
 	}
 
 	/**
