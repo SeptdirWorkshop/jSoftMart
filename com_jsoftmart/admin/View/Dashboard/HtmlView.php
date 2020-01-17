@@ -13,12 +13,41 @@ namespace Joomla\Component\JSoftMart\Administrator\View\Dashboard;
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class HtmlView extends BaseHtmlView
 {
+	/**
+	 * Array of cpanel modules.
+	 *
+	 * @var  array
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $modules = null;
+
+	/**
+	 * Array of cpanel modules.
+	 *
+	 * @var  array
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $quickicons = null;
+
+	/**
+	 * Moduleposition to load.
+	 *
+	 * @var  string
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $position = null;
+
 	/**
 	 * Display the view.
 	 *
@@ -32,6 +61,15 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
+		$this->position   = 'cpanel-jsoftmart';
+		$this->modules    = ModuleHelper::getModules($this->position);
+		$this->quickicons = ModuleHelper::getModules('icon-jsoftmart');
+
+		// Load CPanel languages
+		$language = Factory::getLanguage();
+		$language->load('com_cpanel', JPATH_ADMINISTRATOR);
+
+		// Add title and toolbar
 		$this->addToolbar();
 
 		return parent::display($tpl);
