@@ -24,13 +24,13 @@ use Joomla\Database\QueryInterface;
 class CategoriesModel extends ListModel
 {
 	/**
-	 * Site default translate language.
+	 * The default site language.
 	 *
 	 * @var  array
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $translate = null;
+	protected $translation = null;
 
 	/**
 	 * Constructor.
@@ -44,8 +44,8 @@ class CategoriesModel extends ListModel
 	 */
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
-		// Set translate
-		$this->translate = ComponentHelper::getParams('com_languages')->get('site', 'en-GB');
+		// Set translation
+		$this->translation = ComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 
 		// Add the ordering filtering fields whitelist
 		if (empty($config['filter_fields']))
@@ -136,13 +136,13 @@ class CategoriesModel extends ListModel
 			->from($db->quoteName('#__jsoftmart_categories', 'c'))
 			->where($db->quoteName('c.alias') . ' <> ' . $db->quote('root'));
 
-		// Join over translates
-		$translate = $this->translate;
+		// Join over translations
+		$translation = $this->translation;
 		$query->select([
 			$db->quoteName('t_c.title', 'title')
 		])
-			->leftJoin($db->quoteName('#__jsoftmart_categories_translates', 'ct')
-				. ' ON ct.id = c.id AND ' . $db->quoteName('ct.language') . ' = ' . $db->quote($translate));
+			->leftJoin($db->quoteName('#__jsoftmart_categories_translations', 'ct')
+				. ' ON ct.id = c.id AND ' . $db->quoteName('ct.language') . ' = ' . $db->quote($translation));
 
 		// Filter by published state
 		$published = (string) $this->getState('filter.published');
@@ -172,7 +172,7 @@ class CategoriesModel extends ListModel
 			}
 			else
 			{
-				$query->leftJoin($db->quoteName('#__jsoftmart_categories_translates', 'ta_c') . ' ON cta.id = c.id');
+				$query->leftJoin($db->quoteName('#__jsoftmart_categories_translations', 'ta_c') . ' ON cta.id = c.id');
 				$search = '%' . str_replace(' ', '%', trim($search)) . '%';
 				$query->extendWhere(
 					'AND',

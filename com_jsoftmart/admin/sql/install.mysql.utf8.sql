@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `#__jsoftmart_categories`
     DEFAULT COLLATE = utf8mb4_unicode_ci
     AUTO_INCREMENT = 0;
 
-CREATE TABLE IF NOT EXISTS `#__jsoftmart_categories_translates`
+CREATE TABLE IF NOT EXISTS `#__jsoftmart_categories_translations`
 (
     `id`        int(11)      NOT NULL DEFAULT 0,
     `language`  char(7)      NOT NULL DEFAULT '',

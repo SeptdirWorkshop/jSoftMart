@@ -1,2 +1,2 @@
 DROP TABLE `#__jsoftmart_categories`;
-DROP TABLE `#__jsoftmart_categories_translates`;
+DROP TABLE `#__jsoftmart_categories_translations`;

@@ -83,6 +83,7 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
+		// Initialise variables
 		$this->state         = $this->get('State');
 		$this->items         = $this->get('Items');
 		$this->pagination    = $this->get('Pagination');
@@ -96,7 +97,7 @@ class HtmlView extends BaseHtmlView
 	}
 
 	/**
-	 * Add title and toolbar.
+	 * Add the page title and toolbar.
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
