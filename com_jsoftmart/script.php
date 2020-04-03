@@ -147,7 +147,7 @@ class com_jsoftmartInstallerScript
 		// Add root in not found
 		if (empty($db->loadResult()))
 		{
-			$root            = new stdClass();
+			$root            = new \stdClass;
 			$root->id        = 1;
 			$root->parent_id = 0;
 			$root->lft       = 0;

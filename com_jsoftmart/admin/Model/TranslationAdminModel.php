@@ -13,57 +13,42 @@ namespace Joomla\Component\JSoftMart\Administrator\Model;
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormFactoryInterface;
-use Joomla\CMS\Language\LanguageHelper;
-use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\Component\JSoftMart\Administrator\Helper\TranslationHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class TranslationAdminModel extends AdminModel
 {
 	/**
-	 * The default site language.
+	 * Method to get a single record.
 	 *
-	 * @var  array
+	 * @param   integer  $pk  The id of the primary key.
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @throws  Exception
+	 *
+	 * @return  CMSObject|boolean  Object on success, false on failure.
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
-	protected $translation = null;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param   array                 $config       An array of configuration options (name, state, dbo, table_path, ignore_request).
-	 * @param   MVCFactoryInterface   $factory      The factory.
-	 * @param   FormFactoryInterface  $formFactory  The form factory.
-	 *
-	 * @throws  \Exception
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 */
-	public function __construct($config = [], MVCFactoryInterface $factory = null, FormFactoryInterface $formFactory = null)
+	public function getItem($pk = null)
 	{
-		parent::__construct($config, $factory, $formFactory);
+		if ($item = parent::getItem($pk))
+		{
+			if (property_exists($item, 'translations'))
+			{
+				if (!is_array($item->translations))
+				{
+					$item->translations = ArrayHelper::fromObject($item->translations, false);
+				}
+			}
+		}
 
-		// Set translation
-		$this->translation = ComponentHelper::getParams('com_languages')->get('site', 'en-GB');
-	}
-
-	/**
-	 * Stock method to auto-populate the model state.
-	 *
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected function populateState()
-	{
-		parent::populateState();
-
-		$this->setState('translation.default', $this->translation);
+		return $item;
 	}
 
 	/**
@@ -91,7 +76,7 @@ class TranslationAdminModel extends AdminModel
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getTranslationForms($data = [], $loadData = true)
+	public function getTranslationsForms($data = [], $loadData = true)
 	{
 		return false;
 	}
@@ -105,12 +90,13 @@ class TranslationAdminModel extends AdminModel
 	 * @param   boolean  $clear    Optional argument to force load a new form.
 	 * @param   string   $xpath    An optional xpath to search for the fields.
 	 *
-	 * @throws \Exception
+	 * @throws  \Exception
+	 *
 	 * @return  Form[]|false A Form objects array on success, false on failure
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected function loadTranslationForm($name, $source = null, $options = [], $clear = false, $xpath = false)
+	protected function loadTranslationsForms($name, $source = null, $options = [], $clear = false, $xpath = false)
 	{
 		// Handle the optional arguments
 		$options['control'] = ArrayHelper::getValue((array) $options, 'control', false);
@@ -125,13 +111,12 @@ class TranslationAdminModel extends AdminModel
 
 		// Initialise forms variables
 		$forms         = [];
-		$languages     = LanguageHelper::getLanguages('lang_code');
 		$baseSource    = false;
 		$baseData      = false;
 		$loadFormPaths = false;
 		$formFactory   = false;
 
-		foreach ($languages as $code => $language)
+		foreach (TranslationHelper::getCodes() as $code)
 		{
 			$formOptions = $options;
 

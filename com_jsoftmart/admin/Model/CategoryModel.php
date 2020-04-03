@@ -60,8 +60,8 @@ class CategoryModel extends TranslationAdminModel
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getTranslationForms($data = [], $loadData = true)
+	public function getTranslationsForms($data = [], $loadData = true)
 	{
-		return $this->loadTranslationForm('com_jsoftmart.category', 'category', ['control' => 'jform', 'load_data' => $loadData]);
+		return $this->loadTranslationsForms('com_jsoftmart.category', 'category', ['control' => 'jform', 'load_data' => $loadData]);
 	}
 }

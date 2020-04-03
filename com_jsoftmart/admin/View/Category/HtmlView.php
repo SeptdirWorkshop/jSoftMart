@@ -58,7 +58,7 @@ class HtmlView extends BaseHtmlView
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $translationForms;
+	protected $translationsForms;
 
 	/**
 	 * Display the view.
@@ -74,10 +74,10 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null)
 	{
 		// Initialise variables
-		$this->form             = $this->get('Form');
-		$this->item             = $this->get('Item');
-		$this->state            = $this->get('State');
-		$this->translationForms = $this->get('translationForms');
+		$this->form              = $this->get('Form');
+		$this->item              = $this->get('Item');
+		$this->state             = $this->get('State');
+		$this->translationsForms = $this->get('translationsForms');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
